@@ -23,8 +23,8 @@ configuration:
     description: >-
       The number of seconds between each check for status.  Minimum is 5
       seconds, maximum is 300 seconds.  Defaults to 30 seconds.
-  mqtt_server:
-    name: MQTT Broker
+  mqtt_host:
+    name: MQTT Host
     description: >-
       The hostname or IP address of the MQTT broker.  Leave blank to use the
       default broker for the system.

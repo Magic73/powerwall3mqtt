@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0] - 2025-05-23
+
+### Fixed
+
+- [Issue #38](https://github.com/slyglif/powerwall3mqtt/issues/38): Fix translation for mqtt_host on Configuration page.
+- [Issue #41](https://github.com/slyglif/powerwall3mqtt/issues/41): Allow polling intervals down to 1 second.
+
 ## [0.4.0] - 2025-04-27
 
 ### Changes
@@ -120,7 +127,8 @@
 
 - [Issue #8](https://github.com/slyglif/powerwall3mqtt/issues/8): Shutdowns weren't clean, preventing relavent logs from showing
 
-[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.9...v0.4.0
 [0.3.9]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.8...v0.3.9
 [0.3.8]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.2...v0.3.8

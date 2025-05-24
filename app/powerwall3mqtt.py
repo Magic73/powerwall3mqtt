@@ -128,8 +128,8 @@ class Powerwall3MQTT:
         if config['mqtt_username'] is not None:
             if config['mqtt_password'] is None:
                 raise FatalError("MQTT authentication info not set")
-        if config['tedapi_poll_interval'] < 5:
-            raise FatalError("Polling Interval must be >= 5")
+        if config['tedapi_poll_interval'] < 1:
+            raise FatalError("Polling Interval must be >= 1")
         if (config['mqtt_cert'] is not None) ^ (config['mqtt_key'] is not None):
             raise FatalError("MQTT Certifcate and Key are both required")
 
@@ -298,12 +298,15 @@ class Powerwall3MQTT:
         # Connect to remote services
         mqtt, ha_status = self.connect_mqtt()
         try:
+            cacheexpire = min(self._config['tedapi_poll_interval'] - 1, 4)
+            if cacheexpire == 0:
+                cacheexpire = 0.9
             tedapi = pytedapi.TeslaEnergyDeviceAPI(
                 self._config['tedapi_password'],
                 host=self._config['tedapi_host'])
             powerwall = pytedapi.Powerwall3API(
                 tedapi,
-                cacheexpire=4,
+                cacheexpire=cacheexpire,
                 configexpire=29)
         except requests.exceptions.ConnectionError as e:
             raise FatalError("Unable to connect to Powerwall") from e

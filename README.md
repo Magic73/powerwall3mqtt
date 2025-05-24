@@ -2,7 +2,7 @@
 A simple Home Assistant Add On that acts as a bridge between the Powerwall 3 TEDAPI and MQTT.
 
 ## Current state
-- Powerwall 3 local access requires a direct connection to the TeslaPW_XXXXX WiFi network.  The device running this add-on must have an IP from that network, which is 192.168.91.x/24.  A wired ethernet connection *will not work*.
+- Powerwall 3 local access requires a direct connection to the TeslaPW_XXXXX WiFi network.  The device running this add-on must have an IP from that network, which is 192.168.91.x/24.  A wired ethernet connection **will not work**.
 - The bridge can deal with a single group of one or more Powerwall 3s.  It might also support expansion units, but I have none to test with.
 - Power reporting is working for the following:
 	- Aggregates of the entire system
@@ -11,6 +11,9 @@ A simple Home Assistant Add On that acts as a bridge between the Powerwall 3 TED
 	- Aggregate of all batteries
 	- Individual Powerwall battery levels
 	- Calculations of percentage remaining and user defined backup reserve mirror the Tesla app
+- Polling interval defaults to 30 seconds
+	- It can be configured down to 1 second, but Powerwalls may tell the add-on to backoff.
+	- Issues related to sporadic data will only be looked at if the interval is set to at least 5.
 - No other energy reporting
 	- Pypowerwall doesn't have it yet, and so far it appears it may not be possible
 	- The Energy Dashboard can be supported by manually creating 6 Integral helpers.  The steps as of 2025-02-24 are:

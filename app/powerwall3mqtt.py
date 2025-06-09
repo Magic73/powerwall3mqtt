@@ -274,6 +274,12 @@ class Powerwall3MQTT:
                         logger.warning("HTTP connect timeout, skipping interval.")
                         logger.debug(e, exc_info=True)
                         timeout_skipping = True
+                except requests.exceptions.ReadTimeout as e:
+                    # Likely WiFi connection issue, skip interval
+                    if not timeout_skipping:
+                        logger.warning("HTTP read timeout, skipping interval.")
+                        logger.debug(e, exc_info=True)
+                        timeout_skipping = True
                 except TimeoutError as e:
                     # Likely lock timeout, skip interval
                     logger.warning(e, exc_info=True)

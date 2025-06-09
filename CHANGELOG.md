@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.2] - 2025-06-09
+
+### Fixed
+
+- Fix traceback logging related to HTTP ReadTimeouts.
+
 ## [0.5.1] - 2025-06-09
 
 ### Fixed
@@ -133,7 +139,8 @@
 
 - [Issue #8](https://github.com/slyglif/powerwall3mqtt/issues/8): Shutdowns weren't clean, preventing relavent logs from showing
 
-[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.1...HEAD
+[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.9...v0.4.0

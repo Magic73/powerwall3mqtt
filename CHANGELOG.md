@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1] - 2025-06-09
+
+### Fixed
+
+- [Issue #45](https://github.com/slyglif/powerwall3mqtt/issues/45): Fix translation for mqtt_username.
+
 ## [0.5.0] - 2025-05-23
 
 ### Fixed
@@ -127,7 +133,8 @@
 
 - [Issue #8](https://github.com/slyglif/powerwall3mqtt/issues/8): Shutdowns weren't clean, preventing relavent logs from showing
 
-[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/slyglif/powerwall3mqtt/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.9...v0.4.0
 [0.3.9]: https://github.com/slyglif/powerwall3mqtt/compare/v0.3.8...v0.3.9

@@ -27,7 +27,7 @@ export_if_not_set mqtt password
 
 # Clean up bad config entries
 bashio::addon.option mqtt_server
-bashio::addon.option mqtt_username
+bashio::addon.option mqtt_user
 
 bashio::log.info "Starting Powerwall3MQTT..."
 cd /app

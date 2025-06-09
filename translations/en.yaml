@@ -56,7 +56,7 @@ configuration:
     description: >-
       Controls verifying the certificate details for TLS connections.
       Defaults to false.
-  mqtt_user:
+  mqtt_username:
     name: MQTT Username
     description: >-
       The username to connect to MQTT.  Leave blank to use the default broker

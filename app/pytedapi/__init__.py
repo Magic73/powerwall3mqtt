@@ -54,15 +54,15 @@ import logging
 import time
 
 import requests
-from cachetools import TTLCache
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import urllib3
 
+from cachetools import TTLCache
 from utils.locks import TimeoutRLock
 from . import exceptions
 from . import tedapi_pb2
 
 
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # TEDAPI Fixed Gateway IP Address
 GW_IP = "192.168.91.1"

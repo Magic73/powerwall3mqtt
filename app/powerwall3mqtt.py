@@ -69,10 +69,18 @@ class Powerwall3MQTT:
         logger.debug("Runtime config:")
         for key in sorted(self._config.keys()):
             if key.find('password') == -1:
-                logger.debug("config['%s'] = '%s'", key, self._config[key] if self._config[key] is not None else '')
+                logger.debug("config['%s'] = '%s'", key, self.not_none(self._config[key], ''))
             else:
-                redacted = re.sub('.', 'X', self._config[key] if self._config[key] is not None else '')
+                redacted = re.sub('.', 'X', self.not_none(self._config[key], ''))
                 logger.debug("config['%s'] = '%s'", key, redacted)
+
+
+    def not_none(self, *arg):
+        """Returns the first item in a list that isn't None"""
+        for el in arg:
+            if el is not None:
+                return el
+        return None
 
 
     def loadconfig(self) -> dict:
@@ -228,13 +236,25 @@ class Powerwall3MQTT:
         time.sleep(0.5)
 
 
+    def process_ha_status(self, ha_status, mqtt, tesla):
+        """Routine to enable or disable loop processing based on HA status message"""
+        cmd = ha_status.recv(1)
+        if cmd == b'\01':
+            logger.info("Received ha_status online")
+            self.discover(mqtt, tesla)
+            self.set_pause(False)
+        else:
+            logger.info("Received ha_status offline")
+            self.set_pause(True)
+
+
     def main_loop(self, shutdown, ha_status, mqtt, tesla):
         """The main program loop"""
         sel = DefaultSelector()
         sel.register(shutdown, EVENT_READ)
         sel.register(ha_status, EVENT_READ)
         sel.register(self._update_loop[0], EVENT_READ)
-        timeout_skipping = False
+        timeout_loglevel = logging.WARNING
 
         while True:
             for key, _ in sel.select():
@@ -245,19 +265,12 @@ class Powerwall3MQTT:
                         self.set_running(False)
                         return
                     if key.fileobj == ha_status:
-                        cmd = ha_status.recv(1)
-                        if cmd == b'\01':
-                            logger.info("Received ha_status online")
-                            self.discover(mqtt, tesla)
-                            self.set_pause(False)
-                        else:
-                            logger.info("Received ha_status offline")
-                            self.set_pause(True)
+                        self.process_ha_status(ha_status, mqtt, tesla)
                     elif key.fileobj == self._update_loop[0]:
                         self._update_loop[0].recv(1)
                         logger.debug("Processing update from timing_loop")
                         self.update(mqtt, tesla, True)
-                        timeout_skipping = False
+                        timeout_loglevel = logging.WARNING
                 except pytedapi.exceptions.TEDAPIRateLimitingException as e:
                     self._config['tedapi_poll_interval'] += 1
                     logger.warning(e)
@@ -270,19 +283,18 @@ class Powerwall3MQTT:
                     raise e
                 except requests.exceptions.ConnectTimeout as e:
                     # Likely Powerwall offline, skip interval
-                    if not timeout_skipping:
-                        logger.warning("HTTP connect timeout, skipping interval.")
-                        logger.debug(e, exc_info=True)
-                        timeout_skipping = True
+                    logger.log(timeout_loglevel, "HTTP connect timeout, skipping interval.")
+                    logger.debug(e, exc_info=True)
+                    timeout_loglevel = logging.INFO
                 except requests.exceptions.ReadTimeout as e:
                     # Likely WiFi connection issue, skip interval
-                    if not timeout_skipping:
-                        logger.warning("HTTP read timeout, skipping interval.")
-                        logger.debug(e, exc_info=True)
-                        timeout_skipping = True
+                    logger.log(timeout_loglevel, "HTTP read timeout, skipping interval.")
+                    logger.debug(e, exc_info=True)
+                    timeout_loglevel = logging.INFO
                 except TimeoutError as e:
                     # Likely lock timeout, skip interval
-                    logger.warning(e, exc_info=True)
+                    logger.log(timeout_loglevel, e, exc_info=True)
+                    timeout_loglevel = logging.INFO
                 except Exception as e: # pylint: disable=W0718
                     # Catchall so the loop keeps going
                     logger.exception(e)

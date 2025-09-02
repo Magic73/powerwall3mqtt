@@ -252,14 +252,13 @@ class TeslaEnergyDeviceAPI:
         with self._api_lock:
             url = f"https://{self._gw_ip}/{path}"
 
-          @tenacity.retry(
+        @tenacity.retry(
             wait=tenacity.wait_exponential(multiplier=2, min=2, max=32),
             stop=tenacity.stop_after_attempt(5),
             retry=(tenacity.retry_if_exception_type(requests.exceptions.ConnectionError) |
                    tenacity.retry_if_exception_type(requests.exceptions.Timeout))
         )
-
-     def _make_request():
+        def _make_request():
             return requests.post(url,
                 verify=False,
                 auth=('Tesla_Energy_Device', self._gw_pwd),
@@ -271,9 +270,9 @@ class TeslaEnergyDeviceAPI:
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
             raise exceptions.TEDAPIException("Failed to reach host after multiple retries") from e
 
-            self.check_http_response(r)
-            self._pwcooldown = time.perf_counter()
-            return r
+        self.check_http_response(r)
+        self._pwcooldown = time.perf_counter()
+        return r
 
 
     def get_din(self, force=False):

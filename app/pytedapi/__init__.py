@@ -330,7 +330,7 @@ class Powerwall3API:
             tesla: TeslaEnergyDeviceAPI,
             cacheexpire: int = 5,
             configexpire: int = 5,
-            timeout: int = 5) -> None:
+            timeout: int = 10) -> None:
         self._tesla = tesla
         self._timeout = timeout
 

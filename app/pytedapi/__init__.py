@@ -218,11 +218,9 @@ class TeslaEnergyDeviceAPI:
                    tenacity.retry_if_exception_type(requests.exceptions.Timeout))
         )
         def _make_request():
-            return requests.post(url,
+            return requests.get(url,
                 verify=False,
                 auth=('Tesla_Energy_Device', self._gw_pwd),
-                headers=headers,
-                data=data,
                 timeout=self._timeout)
         try:
             r = _make_request()
